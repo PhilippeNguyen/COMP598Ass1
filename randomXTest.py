@@ -15,6 +15,8 @@ if __name__ == "__main__":
     trueWeights = np.asarray(range(nParams))*2
     x = np.random.rand(nInstances,nParams)
     y = np.dot(x,trueWeights)
+    
+    
     estimatedWeights = OLSClosed(x,y)
     
     print estimatedWeights
