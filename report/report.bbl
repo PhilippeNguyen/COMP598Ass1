@@ -28,4 +28,14 @@ F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
   Machine learning in {P}ython,'' \emph{Journal of Machine Learning Research},
   vol.~12, pp. 2825--2830, 2011.
 
+\bibitem{davidson2004econometric}
+R.~Davidson and J.~G. MacKinnon, \emph{Econometric theory and methods}.\hskip
+  1em plus 0.5em minus 0.4em\relax Oxford University Press New York, 2004,
+  vol.~5.
+
+\bibitem{hastie2005elements}
+T.~Hastie, R.~Tibshirani, J.~Friedman, and J.~Franklin, ``The elements of
+  statistical learning: data mining, inference and prediction,'' \emph{The
+  Mathematical Intelligencer}, vol.~27, no.~2, pp. 83--85, 2005.
+
 \end{thebibliography}
