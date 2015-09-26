@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.6)  26 SEP 2015 14:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.6)  26 SEP 2015 14:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -212,12 +212,12 @@ LaTeX Font Info:    ... okay on input line 64.
 
 -- Lines per column: 56 (exact).
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 121.
+(Font)              <7> on input line 120.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 121.
+(Font)              <5> on input line 120.
 
 LaTeX Warning: Citation `davidson2004econometrics' on page 1 undefined on input
- line 136.
+ line 134.
 
 (./report.bbl)
 
@@ -241,10 +241,10 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 2219 strings out of 494501
- 33932 string characters out of 6167031
- 96498 words of memory out of 5000000
- 5534 multiletter control sequences out of 15000+600000
+ 2224 strings out of 494501
+ 34016 string characters out of 6167031
+ 97498 words of memory out of 5000000
+ 5539 multiletter control sequences out of 15000+600000
  36328 words of font info for 65 fonts, out of 8000000 for 9000
  322 hyphenation exceptions out of 8191
  27i,7n,20p,234b,242s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -260,7 +260,7 @@ s/cm/cmsy7.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/u
 tmb8a.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmbi8
 a.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
 ></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (1 page, 107266 bytes).
+Output written on report.pdf (1 page, 109811 bytes).
 PDF statistics:
  53 PDF objects out of 1000 (max. 8388607)
  38 compressed objects within 1 object stream

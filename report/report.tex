@@ -116,13 +116,11 @@ Fax: (888) 555--1212}}
 
 
 \section{Introduction}
-% no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8a and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
+
+Website popularity prediction is important because $\ldots$
+
+Simple tools like OLS have a surprising power, particularly when couple with
+regularization techniques such as the lasso or ridge.
 
 \section{Implementation of OLS}
 
@@ -157,13 +155,16 @@ $SSR(\beta) = \sum_{i=1}^n (Y-X \beta)^2$. We need to take the derivative to
 cite Joelle's slides lecture 2
 
 \begin{algorithmic}
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
-\EndIf
+\While {$\epsilon > 0.1$ and $i < \text{max\_iterations}$}
+    \State hypothesis $\leftarrow$ $X^T \beta$
+    \State loss $\leftarrow$ hypothesis - $Y$
+    \State gradient $\leftarrow$ 2 $X^T$ loss
+    \State $\beta_{\text{new}} \leftarrow \beta - \frac{\alpha *
+      \text{gradient}}{n}$  
+    \State $\epsilon \leftarrow \beta_{\text{new}} - \beta$
+    \State $i \leftarrow i + 1$
+    \State $\beta_{\text{new}} \leftarrow \beta$
+\EndWhile
 \end{algorithmic}
 
 \subsection{Lasso and Ridge Regularization}
@@ -184,9 +185,23 @@ Talk about Occam's razor
 \EndIf
 \end{algorithmic}
 
+\section{Cross-Validation}
+
+k-fold validation
+
+complete randomization of the fold, by a random variable
+
+\subsection{Hyperparameters Optimization}
+
+Feature selection using the lasso function from \cite{scikit-learn}
+
+Trying to avoid overfitting to be able to generalize to new examples.
+
 \section{Results}
 
-\section{Complementary Dataset}
+Talk about the mean squared error (MSE) obtain 
+
+\section{Complementary Datasets}
 
 
 \section{Conclusion}
