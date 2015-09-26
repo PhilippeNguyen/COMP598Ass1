@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.6)  21 SEP 2015 12:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.6)  26 SEP 2015 13:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -110,31 +110,112 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 \@IEEEtmpitemindent=\dimen124
 \c@IEEEbiography=\count93
 \@IEEEtranrubishbin=\box27
+) (/usr/local/texlive/2015basic/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip44
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015basic/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2015basic/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen125
+))
+(/usr/local/texlive/2015basic/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen126
+)
+(/usr/local/texlive/2015basic/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count94
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count95
+\leftroot@=\count96
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count97
+\DOTSCASE@=\count98
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box28
+\strutbox@=\box29
+\big@size=\dimen127
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count99
+\c@MaxMatrixCols=\count100
+\dotsspace@=\muskip10
+\c@parentequation=\count101
+\dspbrk@lvl=\count102
+\tag@help=\toks16
+\row@=\count103
+\column@=\count104
+\maxfields@=\count105
+\andhelp@=\toks17
+\eqnshift@=\dimen128
+\alignsep@=\dimen129
+\tagshift@=\dimen130
+\tagwidth@=\dimen131
+\totwidth@=\dimen132
+\lineht@=\dimen133
+\@envbody=\toks18
+\multlinegap=\skip45
+\multlinetaggap=\skip46
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/local/texlive/2015basic/texmf-dist/tex/latex/algorithmicx/algorithmicx.st
+y
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+ (/usr/local/texlive/2015basic/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count106
+\c@ALG@rem=\count107
+\c@ALG@nested=\count108
+\ALG@tlm=\skip47
+\ALG@thistlm=\skip48
+\c@ALG@Lnr=\count109
+\c@ALG@blocknr=\count110
+\c@ALG@storecount=\count111
+\c@ALG@tmpcounter=\count112
+\ALG@tmplength=\skip49
+)
+(/usr/local/texlive/2015basic/texmf-dist/tex/latex/algorithmicx/algpseudocode.s
+ty
+Package: algpseudocode 
+
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (/usr/local/texlive/2015basic/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 321.
-LaTeX Font Info:    ... okay on input line 321.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 321.
-LaTeX Font Info:    ... okay on input line 321.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 321.
-LaTeX Font Info:    ... okay on input line 321.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 321.
-LaTeX Font Info:    ... okay on input line 321.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 321.
-LaTeX Font Info:    ... okay on input line 321.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 321.
-LaTeX Font Info:    ... okay on input line 321.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
 
 -- Lines per column: 56 (exact).
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 412.
+(Font)              <7> on input line 121.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 412.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 571.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 571.
+(Font)              <5> on input line 121.
+(./report.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -153,22 +234,25 @@ Before submitting the final camera ready copy, remember to:
 ]
 (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 1033 strings out of 494501
- 18731 string characters out of 6167031
- 71139 words of memory out of 5000000
- 4376 multiletter control sequences out of 15000+600000
- 38728 words of font info for 72 fonts, out of 8000000 for 9000
+ 2218 strings out of 494501
+ 33906 string characters out of 6167031
+ 93498 words of memory out of 5000000
+ 5533 multiletter control sequences out of 15000+600000
+ 36328 words of font info for 65 fonts, out of 8000000 for 9000
  322 hyphenation exceptions out of 8191
- 26i,7n,19p,208b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,7n,20p,234b,242s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015basic/texmf-dist/fonts/enc/dvips/base/8
-r.enc}</usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
-></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></u
-sr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/lo
-cal/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (1 page, 44944 bytes).
+r.enc}</usr/local/texlive/2015basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi10.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr10.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times
+/utmb8a.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmb
+i8a.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmr8a.p
+fb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (1 page, 72953 bytes).
 PDF statistics:
- 25 PDF objects out of 1000 (max. 8388607)
- 17 compressed objects within 1 object stream
+ 37 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
