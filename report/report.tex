@@ -173,6 +173,8 @@ Talk about variance vs bias
 
 Penalizing decrease the variance but increase the bias.
 
+\cite{bishop2006pattern}
+
 To be able to generalize well to new data, we want to avoid over fitting. To do
 so we will penalize extreme weights for our $\beta$
 
@@ -187,13 +189,18 @@ Talk about Occam's razor
 \end{eqnarray}
 \cite{hastie2005elements}
 
+The gradient will then be 
+
+\begin{eqnarray}
+  \frac{\partial SSR(\hat{\beta}^{\text{ridge}} )}{\partial
+  \hat{\beta}^{\text{ridge}}} = -2 X^T (Y-X \beta) + 2 \lambda \| \beta \|
+\end{eqnarray}
+
+We can then add the following condition to our gradient descent algorithm
+
 \begin{algorithmic}
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
+\If {Regularization = 'Ridge'}
+\State loss $+= 2 * \lambda \| \beta \|$
 \EndIf
 \end{algorithmic}
 
@@ -224,6 +231,8 @@ Also talk about the $\alpha$ parameter for the gradient descent.
 Talk about the mean squared error (MSE) obtain when we varied the alpha of the lasso 
 
 \section{Complementary Datasets}
+
+Huffington post
 
 
 \section{Conclusion}
