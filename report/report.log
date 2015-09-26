@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.6)  26 SEP 2015 13:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.6)  26 SEP 2015 13:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -249,7 +249,7 @@ ts/cm/cmsy10.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times
 /utmb8a.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmb
 i8a.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmr8a.p
 fb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (1 page, 72953 bytes).
+Output written on report.pdf (1 page, 72930 bytes).
 PDF statistics:
  37 PDF objects out of 1000 (max. 8388607)
  26 compressed objects within 1 object stream
