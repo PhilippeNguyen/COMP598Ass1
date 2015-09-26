@@ -8,6 +8,7 @@ Created on Sat Sep 19 14:00:08 2015
 import numpy as np
 import csv
 from OLSClosed import OLSClosed
+from sklearn.utils import shuffle
 
 
 def mse(yPred,yTrue):
@@ -37,12 +38,18 @@ if __name__ == "__main__":
     X = np.asarray(xList).astype(float)
     Y = np.asarray(yList).astype(float)
     
-    #create and remove test set
-    #TODO this part
+    
+    #shuffle both X and Y in unison
+    X, Y = shuffle(X,Y)
+    
+    #create and remove test set, 
+    #choose the test set arbitrarily
     Xtest = []
     Ytest = []
     X = X
     Y = Y
+    
+    
     
     
 #    Perform Cross Validation for K-Folds
