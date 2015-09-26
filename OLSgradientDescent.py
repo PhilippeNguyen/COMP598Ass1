@@ -58,9 +58,9 @@ def getAdjustedR2(Y, X, W):
     R2 = np.linalg.norm(np.dot(X, W) - Ymean, ord=2)/np.linalg.norm(Y - Ymean, ord=2) 
     adjustedR2 = 1 - ((1 - R2) * (X.shape[0]-1)/(X.shape[0]-X.shape[1]-1))
     return adjustedR2
-
-def backwardFeatureSelection():
-    while(power)
+#
+#def backwardFeatureSelection():
+#    while(power)
 
 
 nInstances = 1000

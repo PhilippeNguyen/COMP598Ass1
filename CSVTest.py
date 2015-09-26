@@ -40,6 +40,20 @@ if __name__ == "__main__":
     Y = np.asarray(yList).astype(float)
     
     
+    nInstances = 500
+    nParams = 100
+    noiseLevel = 500
+    trueWeights = np.asarray(range(nParams))
+    trueWeights[5:] = 0
+    trueWeights[:4] = 0
+    X = np.random.rand(nInstances,nParams)
+    Y = np.dot(X,trueWeights) + noiseLevel*np.random.rand(np.size(nInstances))
+
+    
+    
+    
+    
+    
     #shuffle both X and Y in unison
     X, Y = shuffle(X,Y)
     
@@ -119,8 +133,10 @@ if __name__ == "__main__":
             Ypred = np.dot(Xvalid,wEst)
             error = mse(Ypred,Yvalid)            
             gradientErrorArray[i,j]= error
-            
-            
+        
+    aveLassoError = np.average(lassoErrorArray,axis = 0)
+    aveClosedError = np.average(closedErrorArray,axis = 0)
+    aveGradientError = np.average(gradientErrorArray,axis = 0)
             
         
     print 'hello'
