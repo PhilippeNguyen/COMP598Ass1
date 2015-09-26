@@ -9,7 +9,8 @@ import numpy as np
 import csv
 from OLSClosed import OLSClosed
 from sklearn.utils import shuffle
-
+from sklearn import linear_model
+from OLSgradientDescent import gradientDescent
 
 def mse(yPred,yTrue):
     squareErrors = np.square(yPred-yTrue)
@@ -58,6 +59,7 @@ if __name__ == "__main__":
     YSplitList = []
     splitStart = 0
     splitEnd = splitSize
+    alphaArray = [1.0, 0.1,0.001, 0.0001, 0.0]
     
     #divides the dataset into k-lists
     for i in range(kFolds):
@@ -72,8 +74,12 @@ if __name__ == "__main__":
         splitEnd = splitEnd + splitSize
         
     # for each kFold, set it aside as a validation set, and use the rest as training
-    errorArray = np.zeros(kFolds)
+    closedErrorArray = np.zeros((kFolds,np.size(alphaArray)))
+    lassoErrorArray = np.zeros((kFolds,np.size(alphaArray)))
+    gradientErrorArray = np.zeros((kFolds,np.size(alphaArray)))
+    
     for i in range(kFolds):
+        print "fold " + str(i)
         #go through the and generate a validation and training set
         Xvalid = []
         Xtrain = np.array([], dtype=np.float64).reshape(0,np.size(X,1))
@@ -88,12 +94,34 @@ if __name__ == "__main__":
                 Xvalid = XSplitList[j]
                 Yvalid = YSplitList[j]
         
-        #Estimation and prediction using closed form solution        
-        wEst = OLSClosed(Xtrain,Ytrain)
-        Ypred = np.dot(Xvalid,wEst)
-        error = mse(Ypred,Yvalid)
+        #run all hyperparameters
         
-        errorArray[i]= error
+        for j in range(np.size(alphaArray)):
+            print "alpha " + str(j)
+            
+        #estimation using sklearns Lasso regression
+            clf = linear_model.Lasso(alpha=alphaArray[j], max_iter = 10000)
+            clf.fit(Xtrain,Ytrain)
+            
+           
+            Ypred = clf.predict(Xvalid)
+            error  = mse(Ypred,Yvalid)
+            lassoErrorArray[i,j] = error
+        
+        #Estimation and prediction using closed form solution 
+            wEst = OLSClosed(Xtrain,Ytrain,L2 = alphaArray[j])
+            Ypred = np.dot(Xvalid,wEst)
+            error = mse(Ypred,Yvalid)            
+            closedErrorArray[i,j]= error
+            
+        #Estimation and prediction using gradient descent
+            wEst = gradientDescent(Ytrain,Xtrain,0.0001, 10000, 0.01, 'ridge', alphaArray[j])
+            Ypred = np.dot(Xvalid,wEst)
+            error = mse(Ypred,Yvalid)            
+            gradientErrorArray[i,j]= error
+            
+            
+            
         
     print 'hello'
         
