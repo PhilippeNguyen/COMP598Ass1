@@ -1,0 +1,289 @@
+
+\documentclass[conference]{IEEEtran}
+
+\date{\today}
+\usepackage[cmex10]{amsmath}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+
+
+\usepackage{url}
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/tex-archive/info/epslatex/
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{OLS}
+
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Alexandre Piche}
+\IEEEauthorblockA{ 260478404 \\
+Department of Mathematics and Statistics\\
+McGill University\\
+Montreal, Quebec\\
+Email: alexandre.piche@mail.mcgill.ca}
+\and
+\IEEEauthorblockN{Philippe Nguyen}
+\IEEEauthorblockA{260482336 \\
+Springfield, USA\\
+Email: homer@thesimpsons.com}
+\and
+\IEEEauthorblockN{Yash Lakhani}
+\IEEEauthorblockA{Starfleet Academy\\
+San Francisco, California 96678--2391\\
+Telephone: (800) 555--1212\\
+Fax: (888) 555--1212}}
+
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract
+\begin{abstract}
+  Implementation of linear regression using the closed form and the
+  gradient descent solutions. Incorporate the ridge regularization from scratch
+  and used the lasso implementation from scikit-learn \cite{scikit-learn}.
+\end{abstract}
+
+% no keywords
+
+
+
+
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+
+Website popularity prediction is important because $\ldots$
+
+Simple tools like OLS have a surprising power, particularly when couple with
+regularization techniques such as the lasso or ridge.
+
+\section{Implementation of OLS}
+
+\begin{eqnarray}
+  Y = X \beta + \epsilon
+\end{eqnarray}
+
+\subsection{Closed Form}
+
+With the traditional assumption of $X^T \epsilon = 0$
+\cite{davidson2004econometric}, i.e. that the error is 
+uncorrelated with the matrix $X$, it is easy to solve for the weights, the
+resulting equation is given by
+
+\begin{eqnarray}
+  Y &=& X \beta + \epsilon \\
+  X^T Y &=& X^T X \beta + X^T \epsilon \\
+  \hat{\beta} &=& (X^TX)^{-1}X^TY 
+\end{eqnarray}
+
+
+\subsection{Gradient Descent}
+
+It is computationally inefficient to invert large matrices such as the one
+provided for this exercise. It is more efficient to minimize the sum of squares
+$SSR(\beta) = \sum_{i=1}^n (Y-X \beta)^2$. We need to take the derivative to 
+
+\begin{eqnarray}
+  \frac{\partial SSR(\beta)}{\partial \beta} &=& -2 X^T (Y-X \beta)
+\end{eqnarray}
+
+cite Joelle's slides lecture 2
+
+\begin{algorithmic}
+\While {$\epsilon > 0.1$ and $i < \text{max\_iterations}$}
+    \State hypothesis $\leftarrow$ $X^T \beta$
+    \State loss $\leftarrow$ hypothesis - $Y$
+    \State gradient $\leftarrow$ 2 $X^T$ loss
+    \State $\beta_{\text{new}} \leftarrow \beta - \frac{\alpha *
+      \text{gradient}}{n}$  
+    \State $\epsilon \leftarrow \beta_{\text{new}} - \beta$
+    \State $i \leftarrow i + 1$
+    \State $\beta_{\text{new}} \leftarrow \beta$
+\EndWhile
+\end{algorithmic}
+
+\section{Lasso and Ridge Regularization}
+
+Talk about variance vs bias
+
+Penalizing decrease the variance but increase the bias.
+
+To be able to generalize well to new data, we want to avoid over fitting. To do
+so we will penalize extreme weights for our $\beta$
+
+Talk about Occam's razor
+
+\subsection{Ridge or L2-Regularization}
+
+\begin{eqnarray}
+  \hat{\beta}^{\text{ridge}} = \stackrel{\text{argmin}}{\beta}
+\Bigg\{ \sum_{i=1}^N \bigg(y_i - \beta_0 \sum_{j=1}^p x_{ij} \beta_j \bigg)^2 +
+\lambda \sum_{j=1}^p \beta_j^2 \Bigg\}
+\end{eqnarray}
+\cite{hastie2005elements}
+
+\begin{algorithmic}
+\If {$i\geq maxval$}
+    \State $i\gets 0$
+\Else
+    \If {$i+k\leq maxval$}
+        \State $i\gets i+k$
+    \EndIf
+\EndIf
+\end{algorithmic}
+
+\subsection{Lasso or L1-Regularization}
+
+\cite{scikit-learn}
+\cite{hastie2005elements}
+
+\section{Cross-Validation}
+
+k-fold validation
+
+complete randomization of the fold, by a random variable
+
+\subsection{Hyperparameters Optimization}
+
+Feature selection using the lasso function from \cite{scikit-learn}
+
+Trying to avoid overfitting to be able to generalize to new examples.
+
+we want to optimize the learning rate and the penalty rate
+
+\section{Results}
+
+
+Also talk about the $\alpha$ parameter for the gradient descent.
+
+Talk about the mean squared error (MSE) obtain when we varied the alpha of the lasso 
+
+\section{Complementary Datasets}
+
+
+\section{Conclusion}
+The conclusion goes here.
+
+
+
+
+% conference papers do not normally have an appendix
+
+
+% use section* for acknowledgment
+\section*{Acknowledgment}
+
+
+The authors would like to thank...
+
+
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{Bibliography}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+
+
+
+% that's all folks
+\end{document}
+
+

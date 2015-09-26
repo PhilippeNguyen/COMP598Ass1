@@ -8,8 +8,14 @@ Created on Sat Sep 19 14:00:08 2015
 import numpy as np
 import csv
 from OLSClosed import OLSClosed
+from sklearn.utils import shuffle
+from sklearn import linear_model
+from OLSgradientDescent import gradientDescent
 
-    
+def mse(yPred,yTrue):
+    squareErrors = np.square(yPred-yTrue)
+    sse = np.sum(squareErrors)
+    return sse/len(squareErrors)
 
 if __name__ == "__main__":
     
@@ -18,6 +24,8 @@ if __name__ == "__main__":
     
     xList = []
     yList = []
+    
+    #read the CSV and create X and Y Matrices
     
     with open('OnlineNewsPopularity/OnlineNewsPopularity.csv', 'rb') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -31,12 +39,99 @@ if __name__ == "__main__":
     X = np.asarray(xList).astype(float)
     Y = np.asarray(yList).astype(float)
     
+    
+    #shuffle both X and Y in unison
+    X, Y = shuffle(X,Y)
+    
+    #create and remove test set, 
+    #choose the test set arbitrarily
+    Xtest = []
+    Ytest = []
+    X = X
+    Y = Y
+    
+    
+    
+    
 #    Perform Cross Validation for K-Folds
-    padding = (-len(X))%kFolds
-    np.split(np.concatenate((a,np.zeros(padding))),kFolds)
+    splitSize = np.size(X,0)/kFolds
+    XSplitList = []
+    YSplitList = []
+    splitStart = 0
+    splitEnd = splitSize
+    alphaArray = [1.0, 0.1,0.001, 0.0001, 0.0]
     
-    aa = split_padded(X,kFolds)
+    #divides the dataset into k-lists
+    for i in range(kFolds):
+        if i != kFolds -1:                
+            XSplitList.append(X[splitStart:splitEnd])
+            YSplitList.append(Y[splitStart:splitEnd])
+        else:
+            XSplitList.append(X[splitStart:])
+            YSplitList.append(Y[splitStart:])
+                    
+        splitStart = splitStart +splitSize
+        splitEnd = splitEnd + splitSize
+        
+    # for each kFold, set it aside as a validation set, and use the rest as training
+    closedErrorArray = np.zeros((kFolds,np.size(alphaArray)))
+    lassoErrorArray = np.zeros((kFolds,np.size(alphaArray)))
+    gradientErrorArray = np.zeros((kFolds,np.size(alphaArray)))
     
-    wEst = OLSClosed(X,Y)
+    for i in range(kFolds):
+        print "fold " + str(i)
+        #go through the and generate a validation and training set
+        Xvalid = []
+        Xtrain = np.array([], dtype=np.float64).reshape(0,np.size(X,1))
+        Yvalid = []
+        Ytrain = np.array([], dtype=np.float64).reshape(0)
+        
+        for j in range(kFolds):
+            if j != i:
+                Xtrain = np.vstack((Xtrain,XSplitList[j]))
+                Ytrain = np.concatenate((Ytrain,YSplitList[j]))
+            else:
+                Xvalid = XSplitList[j]
+                Yvalid = YSplitList[j]
+        
+        #run all hyperparameters
+        
+        for j in range(np.size(alphaArray)):
+            print "alpha " + str(j)
+            
+        #estimation using sklearns Lasso regression
+            clf = linear_model.Lasso(alpha=alphaArray[j], max_iter = 10000)
+            clf.fit(Xtrain,Ytrain)
+            
+           
+            Ypred = clf.predict(Xvalid)
+            error  = mse(Ypred,Yvalid)
+            lassoErrorArray[i,j] = error
+        
+        #Estimation and prediction using closed form solution 
+            wEst = OLSClosed(Xtrain,Ytrain,L2 = alphaArray[j])
+            Ypred = np.dot(Xvalid,wEst)
+            error = mse(Ypred,Yvalid)            
+            closedErrorArray[i,j]= error
+            
+        #Estimation and prediction using gradient descent
+            wEst = gradientDescent(Ytrain,Xtrain,0.0001, 10000, 0.01, 'ridge', alphaArray[j])
+            Ypred = np.dot(Xvalid,wEst)
+            error = mse(Ypred,Yvalid)            
+            gradientErrorArray[i,j]= error
+            
+            
+            
+        
+    print 'hello'
+        
+                
+                    
+            
+        
+        
+        
+        
     
+
     
