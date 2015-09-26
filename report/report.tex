@@ -131,14 +131,14 @@ regularization techniques such as the lasso or ridge.
 \subsection{Closed Form}
 
 With the traditional assumption of $X^T \epsilon = 0$
-\cite{davidson2004econometrics}, i.e. that the error is 
+\cite{davidson2004econometric}, i.e. that the error is 
 uncorrelated with the matrix $X$, it is easy to solve for the weights, the
 resulting equation is given by
 
 \begin{eqnarray}
   Y &=& X \beta + \epsilon \\
   X^T Y &=& X^T X \beta + X^T \epsilon \\
-  \hat{\beta} &=& (X^TX)^{-1}X^TY \\
+  \hat{\beta} &=& (X^TX)^{-1}X^TY 
 \end{eqnarray}
 
 
@@ -167,13 +167,25 @@ cite Joelle's slides lecture 2
 \EndWhile
 \end{algorithmic}
 
-\subsection{Lasso and Ridge Regularization}
+\section{Lasso and Ridge Regularization}
+
+Talk about variance vs bias
+
+Penalizing decrease the variance but increase the bias.
 
 To be able to generalize well to new data, we want to avoid over fitting. To do
 so we will penalize extreme weights for our $\beta$
 
 Talk about Occam's razor
 
+\subsection{Ridge or L2-Regularization}
+
+\begin{eqnarray}
+  \hat{\beta}^{\text{ridge}} = \stackrel{\text{argmin}}{\beta}
+\Bigg\{ \sum_{i=1}^N \bigg(y_i - \beta_0 \sum_{j=1}^p x_{ij} \beta_j \bigg)^2 +
+\lambda \sum_{j=1}^p \beta_j^2 \Bigg\}
+\end{eqnarray}
+\cite{hastie2005elements}
 
 \begin{algorithmic}
 \If {$i\geq maxval$}
@@ -184,6 +196,11 @@ Talk about Occam's razor
     \EndIf
 \EndIf
 \end{algorithmic}
+
+\subsection{Lasso or L1-Regularization}
+
+\cite{scikit-learn}
+\cite{hastie2005elements}
 
 \section{Cross-Validation}
 
@@ -197,9 +214,14 @@ Feature selection using the lasso function from \cite{scikit-learn}
 
 Trying to avoid overfitting to be able to generalize to new examples.
 
+we want to optimize the learning rate and the penalty rate
+
 \section{Results}
 
-Talk about the mean squared error (MSE) obtain 
+
+Also talk about the $\alpha$ parameter for the gradient descent.
+
+Talk about the mean squared error (MSE) obtain when we varied the alpha of the lasso 
 
 \section{Complementary Datasets}
 
