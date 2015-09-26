@@ -12,9 +12,9 @@ def gradientDescent(Y, X, eps, nb_iter, alpha, penalty, ll = 0):
         loss = hypothesis - Y
 
         if(penalty == 'ridge'):
-            loss += 2 * ll * np.linalg.norm(W, ord = 1)
+            penalty = 2 * ll * np.linalg.norm(W, ord = 1)
 
-        gradient = 2 * np.dot(X.T, loss)
+        gradient = 2 * np.dot(X.T, loss) + penalty
         W_new = W - alpha * gradient / X.shape[0]
         epsilon = np.linalg.norm(W_new - W, ord = 1)
         i += 1
