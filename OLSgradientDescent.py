@@ -1,13 +1,13 @@
 import numpy as np
 import pdb
 
-def gradientDescent(Y, X, eps, nb_iter, learning_rate, regularization, penalty_rate = 0):
+def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, regularization, penalty_rate = 0):
 
     epsilon = 9999
     i = 1
     W = np.random.normal(0, 1, X.shape[1])
 
-    while (epsilon > eps and i < nb_iter):
+    while (epsilon > tolerance and i < nb_iterations):
         fitted_values = np.dot(X, W)
         loss = fitted_values - Y
 
