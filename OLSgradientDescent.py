@@ -1,21 +1,21 @@
 import numpy as np
 import pdb
 
-def gradientDescent(Y, X, eps, nb_iter, alpha, penalty, ll = 0):
+def gradientDescent(Y, X, eps, nb_iter, learning_rate, regularization, penalty_rate = 0):
 
     epsilon = 9999
     i = 1
     W = np.random.normal(0, 1, X.shape[1])
 
     while (epsilon > eps and i < nb_iter):
-        hypothesis = np.dot(X, W)
-        loss = hypothesis - Y
+        fitted_values = np.dot(X, W)
+        loss = fitted_values - Y
 
-        if(penalty == 'ridge'):
-            penalty = 2 * ll * np.linalg.norm(W, ord = 1)
+        if(regularization == 'ridge'):
+            penalty = 2 * penalty_rate * np.linalg.norm(W, ord = 1)
 
         gradient = 2 * np.dot(X.T, loss) + penalty
-        W_new = W - alpha * gradient / X.shape[0]
+        W_new = W - learning_rate * gradient / X.shape[0]
         epsilon = np.linalg.norm(W_new - W, ord = 1)
         i += 1
         W = W_new
