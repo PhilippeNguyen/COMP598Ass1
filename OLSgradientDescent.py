@@ -31,11 +31,11 @@ def getAdjustedR2(Y, X, W):
     return adjustedR2
 
 
-def AIC(Y, X, W):
+def getAIC(Y, X, W):
     myLogLik = logLik(Y, X, W)
     return 2 * X.shape[1] - 2 * myLogLik
 
-def BIC(Y, X, W):
+def getBIC(Y, X, W):
     myLogLik = logLik(Y, X, W)
     return X.shape[1] * log (X.shape[0]) - 2 * myLogLik
     
