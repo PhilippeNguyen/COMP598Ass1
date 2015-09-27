@@ -49,7 +49,7 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, regularizatio
     while (epsilon > tolerance and i < nb_iterations):
         fitted_values = np.dot(X, W)
         loss = fitted_values - Y
-
+    penalty = 0
         if(regularization == 'ridge'):
             penalty = 2 * penalty_rate * np.linalg.norm(W, ord = 1)
 
