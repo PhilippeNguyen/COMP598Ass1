@@ -11,10 +11,12 @@ from OLSClosed import OLSClosed
 from sklearn.utils import shuffle
 from sklearn import linear_model
 from OLSgradientDescent import gradientDescent
+import pdb
 
 def mse(yPred,yTrue):
     squareErrors = np.square(yPred-yTrue)
     sse = np.sum(squareErrors)
+    pdb.set_trace()
     return sse/len(squareErrors)
 
 if __name__ == "__main__":
@@ -44,14 +46,14 @@ if __name__ == "__main__":
     nParams = 100
     noiseLevel = 500
     trueWeights = np.asarray(range(nParams))
-    trueWeights[5:] = 0
-    trueWeights[:4] = 0
+#    trueWeights[5:] = 0
+#    trueWeights[:4] = 0
     X = np.random.rand(nInstances,nParams)
     Y = np.dot(X,trueWeights) + noiseLevel*np.random.rand(np.size(nInstances))
 
     
     
-    
+    #TODO, feature normalization and adding the 1s column
     
     
     #shuffle both X and Y in unison
@@ -73,7 +75,7 @@ if __name__ == "__main__":
     YSplitList = []
     splitStart = 0
     splitEnd = splitSize
-    alphaArray = [1.0, 0.1,0.001, 0.0001, 0.0]
+    alphaArray = [10,1.0, 0.1,0.001, 0.0001, 0.0]
     
     #divides the dataset into k-lists
     for i in range(kFolds):
@@ -94,6 +96,7 @@ if __name__ == "__main__":
     
     for i in range(kFolds):
         print "fold " + str(i)
+#        pdb.set_trace()
         #go through the and generate a validation and training set
         Xvalid = []
         Xtrain = np.array([], dtype=np.float64).reshape(0,np.size(X,1))
@@ -138,9 +141,9 @@ if __name__ == "__main__":
     aveClosedError = np.average(closedErrorArray,axis = 0)
     aveGradientError = np.average(gradientErrorArray,axis = 0)
             
-        
-    print 'hello'
-        
+    print aveLassoError
+    print aveClosedError
+    print aveGradientError    
                 
                     
             
