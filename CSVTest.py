@@ -65,21 +65,24 @@ if __name__ == "__main__":
     Ytest = []
     X = X
     Y = Y
-    
-    
-    
-    
+
+    test = gradientDescent(Y, X, 0.1, 10000, 0.01, 'nothing')
 #    Perform Cross Validation for K-Folds
     splitSize = np.size(X,0)/kFolds
     XSplitList = []
     YSplitList = []
     splitStart = 0
     splitEnd = splitSize
+<<<<<<< HEAD
     alphaArray = [10,1.0, 0.1,0.001, 0.0001, 0.0]
     
+=======
+    alphaArray = [1.0, 0.1,0.001, 0.0001, 0.0]
+
+>>>>>>> origin/master
     #divides the dataset into k-lists
     for i in range(kFolds):
-        if i != kFolds -1:                
+        if i != kFolds -1:
             XSplitList.append(X[splitStart:splitEnd])
             YSplitList.append(Y[splitStart:splitEnd])
         else:
@@ -102,7 +105,7 @@ if __name__ == "__main__":
         Xtrain = np.array([], dtype=np.float64).reshape(0,np.size(X,1))
         Yvalid = []
         Ytrain = np.array([], dtype=np.float64).reshape(0)
-        
+
         for j in range(kFolds):
             if j != i:
                 Xtrain = np.vstack((Xtrain,XSplitList[j]))
@@ -110,36 +113,37 @@ if __name__ == "__main__":
             else:
                 Xvalid = XSplitList[j]
                 Yvalid = YSplitList[j]
-        
+
         #run all hyperparameters
-        
+
         for j in range(np.size(alphaArray)):
             print "alpha " + str(j)
-            
+
         #estimation using sklearns Lasso regression
             clf = linear_model.Lasso(alpha=alphaArray[j], max_iter = 10000)
             clf.fit(Xtrain,Ytrain)
-            
-           
+
+
             Ypred = clf.predict(Xvalid)
             error  = mse(Ypred,Yvalid)
             lassoErrorArray[i,j] = error
-        
+
         #Estimation and prediction using closed form solution 
             wEst = OLSClosed(Xtrain,Ytrain,L2 = alphaArray[j])
             Ypred = np.dot(Xvalid,wEst)
             error = mse(Ypred,Yvalid)            
             closedErrorArray[i,j]= error
-            
+
         #Estimation and prediction using gradient descent
             wEst = gradientDescent(Ytrain,Xtrain,0.0001, 10000, 0.01, 'ridge', alphaArray[j])
             Ypred = np.dot(Xvalid,wEst)
-            error = mse(Ypred,Yvalid)            
+            error = mse(Ypred,Yvalid)
             gradientErrorArray[i,j]= error
-        
+
     aveLassoError = np.average(lassoErrorArray,axis = 0)
     aveClosedError = np.average(closedErrorArray,axis = 0)
     aveGradientError = np.average(gradientErrorArray,axis = 0)
+<<<<<<< HEAD
             
     print aveLassoError
     print aveClosedError
@@ -152,5 +156,11 @@ if __name__ == "__main__":
         
         
     
+=======
 
-    
+    print 'hello'
+>>>>>>> origin/master
+
+
+
+

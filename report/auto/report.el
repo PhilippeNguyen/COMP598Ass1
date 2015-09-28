@@ -5,6 +5,10 @@
                      '(("IEEEtran" "conference")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("amsmath" "cmex10")))
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
+   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
+   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "url")
    (TeX-run-style-hooks
     "latex2e"
     "IEEEtran"
@@ -13,8 +17,6 @@
     "algorithmicx"
     "algpseudocode"
     "url")
-   (LaTeX-add-environments
-    '("IEEEbiography" LaTeX-env-args ["argument"] 1))
    (LaTeX-add-bibliographies
     "Bibliography")))
 

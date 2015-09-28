@@ -33,9 +33,17 @@ R.~Davidson and J.~G. MacKinnon, \emph{Econometric theory and methods}.\hskip
   1em plus 0.5em minus 0.4em\relax Oxford University Press New York, 2004,
   vol.~5.
 
+\bibitem{bishop2006pattern}
+C.~M. Bishop, \emph{Pattern recognition and machine learning}.\hskip 1em plus
+  0.5em minus 0.4em\relax springer, 2006.
+
 \bibitem{hastie2005elements}
 T.~Hastie, R.~Tibshirani, J.~Friedman, and J.~Franklin, ``The elements of
   statistical learning: data mining, inference and prediction,'' \emph{The
   Mathematical Intelligencer}, vol.~27, no.~2, pp. 83--85, 2005.
+
+\bibitem{murphy2012machine}
+K.~P. Murphy, \emph{Machine learning: a probabilistic perspective}.\hskip 1em
+  plus 0.5em minus 0.4em\relax MIT press, 2012.
 
 \end{thebibliography}

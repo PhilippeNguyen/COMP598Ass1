@@ -77,21 +77,15 @@
 % affiliations
 \author{\IEEEauthorblockN{Alexandre Piche}
 \IEEEauthorblockA{ 260478404 \\
-Department of Mathematics and Statistics\\
-McGill University\\
-Montreal, Quebec\\
-Email: alexandre.piche@mail.mcgill.ca}
+}
 \and
 \IEEEauthorblockN{Philippe Nguyen}
 \IEEEauthorblockA{260482336 \\
-Springfield, USA\\
-Email: homer@thesimpsons.com}
+}
 \and
 \IEEEauthorblockN{Yash Lakhani}
-\IEEEauthorblockA{Starfleet Academy\\
-San Francisco, California 96678--2391\\
-Telephone: (800) 555--1212\\
-Fax: (888) 555--1212}}
+\IEEEauthorblockA{260500612\\
+}}
 
 
 
@@ -104,6 +98,7 @@ Fax: (888) 555--1212}}
   Implementation of linear regression using the closed form and the
   gradient descent solutions. Incorporate the ridge regularization from scratch
   and used the lasso implementation from scikit-learn \cite{scikit-learn}.
+  Explore dimension reduction algorithms.
 \end{abstract}
 
 % no keywords
@@ -161,11 +156,25 @@ cite Joelle's slides lecture 2
     \State gradient $\leftarrow$ 2 $X^T$ loss
     \State $\beta_{\text{new}} \leftarrow \beta - \frac{\alpha *
       \text{gradient}}{n}$  
-    \State $\epsilon \leftarrow \beta_{\text{new}} - \beta$
+    \State $\epsilon \leftarrow \| \beta_{\text{new}} - \beta \| $ 
     \State $i \leftarrow i + 1$
     \State $\beta_{\text{new}} \leftarrow \beta$
 \EndWhile
 \end{algorithmic}
+
+\section{Optimization}
+
+Given the complexity of the optimization, we explored different strategy
+
+\subsection{Early Stopping}
+
+Stop the while loop when we start overfitting the test set.
+
+\subsection{Momentum}
+
+The idea is that we would like to take smaller step at the beginning of the
+optimization since the gradient is huge, but as we move closer to the real
+solution we might like to take larger step towards the optimal solution.
 
 \section{Lasso and Ridge Regularization}
 
@@ -178,7 +187,9 @@ Penalizing decrease the variance but increase the bias.
 To be able to generalize well to new data, we want to avoid over fitting. To do
 so we will penalize extreme weights for our $\beta$
 
-Talk about Occam's razor
+According to the famous  and widely accepted Occam's razor principle parsimonous
+models generalize better than more complex models. Is it therefore legitimate to
+select feature to increase our prediction power.
 
 \subsection{Ridge or L2-Regularization}
 
@@ -199,7 +210,7 @@ The gradient will then be
 We can then add the following condition to our gradient descent algorithm
 
 \begin{algorithmic}
-\If {Regularization = 'Ridge'}
+\If {'Ridge' is True}
 \State loss $+= 2 * \lambda \| \beta \|$
 \EndIf
 \end{algorithmic}
@@ -208,6 +219,37 @@ We can then add the following condition to our gradient descent algorithm
 
 \cite{scikit-learn}
 \cite{hastie2005elements}
+
+\section{Dimension Reduction}
+
+\subsection{Principal Component Analysis}
+
+Given the large dimension of the dataset and that some of the feature are highly
+correlated we decided to reduced the dimension by using 
+principal component analysis (PCA) algorithm. We noticed that $\%$ of the
+variance can be explained by the first $3$ dimensions. The idea behind the PCA
+algorithm is trying to reconstruct X, by the minimal set of component. Namely we
+want to find a $W$ such that 
+
+$L$ linear basis vector
+
+$X$ is $K \times N$, where $K$ is the number of feature and $N$ the number of
+examples. 
+
+\begin{eqnarray}
+  J(W, Z) &=& \| X - WZ^T\|_F^2
+\end{eqnarray}
+
+Where $W$ is $K \times L$ orthonormal and $Z$ is $N \times L$ matrix
+
+\cite{murphy2012machine}
+\cite{scikit-learn}
+
+\subsection{Feature Regularization}
+
+It was numerically challenging to apply the gradient to feature that are of
+multiple order different from each other. We can normalize without changing
+their span, since it is a linear transformation.
 
 \section{Cross-Validation}
 
@@ -224,7 +266,6 @@ Trying to avoid overfitting to be able to generalize to new examples.
 we want to optimize the learning rate and the penalty rate
 
 \section{Results}
-
 
 Also talk about the $\alpha$ parameter for the gradient descent.
 
