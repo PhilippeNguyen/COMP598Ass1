@@ -13,12 +13,12 @@ def getSSR(Y, X, W):
 def logLik(Y, X, W):
     SSR = getSSR(Y, X, W)
     sigma2 = SSR / (X[0]-2)
-    myLogLik = np.log(1/np.sqrt(2*np.pi*sigma2)) - 1/(2 * sigma2) * SSR
+    myLogLik = np.log(1/np.sqrt(np.abs(2*np.pi*sigma2))) - 1/(2 * sigma2) * SSR
     return myLogLik
 
 def getSDBetas(Y, X, W):
     sigma2 = getSigma2(Y, X, W)
-    return np.sqrt(sigma2 / np.dot(X.T, X))
+    return np.sqrt(np.abs(sigma2 / np.dot(X.T, X)))
 
 def getSignificance(Y, X, W):
     SD = getSDBetas(Y, X, W)
@@ -47,7 +47,7 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, ridge = False
     W = np.random.normal(0, 1, X.shape[1])
 
     while (epsilon > tolerance and i < nb_iterations):
-        pdb.set_trace()
+        #pdb.set_trace()
         fitted_values = np.dot(X, W)
         loss = fitted_values - Y
         penalty = 0
@@ -56,13 +56,13 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, ridge = False
 
         gradient = 2 * np.dot(X.T, loss) + penalty
         W_new = W - learning_rate * gradient / X.shape[0]
-        epsilon = np.linalg.norm(W_new - W, ord = 1)
+        epsilon = np.linalg.norm(W_new - W, ord = 1) / X.shape[1]
         i += 1
         W = W_new
-    W_significance = getSignificance(Y, X, W)
-    r2 = getAdjustedR2(Y, X, W)
-    aic = getAIC(Y, X, W)
-    bic = getBIC(Y, X, W)
-    toRet = {'Weights': W, 'Significance': W_significance, 'Adjusted R2': r2, 'AIC': aic, 'BIC': bic}
-    return toRet
+    #W_significance = getSignificance(Y, X, W)
+    #r2 = getAdjustedR2(Y, X, W)
+    #aic = getAIC(Y, X, W)
+    #bic = getBIC(Y, X, W)
+    #toRet = {'Weights': W, 'Significance': W_significance, 'Adjusted R2': r2, 'AIC': aic, 'BIC': bic}
+    return W
 
