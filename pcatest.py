@@ -22,10 +22,10 @@ X = inp[:,1:60]
 Y = inp[:,60]
 pca = PCA(n_components = 5)
 
-pca.fit(X.T)
+pca.fit(X)
 print(pca.explained_variance_ratio_) 
-PCA_components = pca.components_
+X = pca.transform(X)
 
-ones = np.ones(PCA_components.shape[1])
-PCA_components = np.column_stack((ones, PCA_components.T))
-test = gradientDescent(Y, PCA_components, 0.1, 1000, 0.01)
+ones = np.ones(X.shape[1])
+X = np.column_stack((ones, X))
+test = gradientDescent(Y, X, 0.1, 1000, 0.01)
