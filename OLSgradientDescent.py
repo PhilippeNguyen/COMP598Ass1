@@ -47,7 +47,6 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, ridge = False
     W = np.random.normal(0, 1, X.shape[1])
 
     while (epsilon > tolerance and i < nb_iterations):
-       # pdb.set_trace()
         fitted_values = np.dot(X, W)
         loss = fitted_values - Y
         penalty = 0
@@ -59,10 +58,13 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, ridge = False
         epsilon = np.linalg.norm(W_new - W, ord = 1) / X.shape[1]
         i += 1
         W = W_new
-    #W_significance = getSignificance(Y, X, W)
-    #r2 = getAdjustedR2(Y, X, W)
-    #aic = getAIC(Y, X, W)
-    #bic = getBIC(Y, X, W)
-    #toRet = {'Weights': W, 'Significance': W_significance, 'Adjusted R2': r2, 'AIC': aic, 'BIC': bic}
+
     return W
+
+###W_significance = getSignificance(Y, X, W)
+###r2 = getAdjustedR2(Y, X, W)
+###aic = getAIC(Y, X, W)
+###bic = getBIC(Y, X, W)
+###toRet = {'Weights': W, 'Significance': W_significance, 'Adjusted R2': r2, 'AIC': aic, 'BIC': bic}
+##return W
 

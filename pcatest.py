@@ -20,12 +20,13 @@ inp = input.as_matrix()
 
 X = inp[:,1:60]
 Y = inp[:,60]
-pca = PCA(n_components = 1)
+pca = PCA(n_components = 3)
 
 pca.fit(X)
 print(pca.explained_variance_ratio_) 
 X_new = pca.transform(X)
+X_new = X_new 
 
 ones = np.ones(X_new.shape[0])
 X_new = np.column_stack((ones, X_new))
-test = gradientDescent(Y[0:100,], X_new[0:100,], 0.1, 1000, 0.01)
+test = gradientDescent(Y[0:1000,], X_new[0:1000,], 0, 100000, 1e-12)
