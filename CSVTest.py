@@ -16,7 +16,7 @@ import pdb
 def mse(yPred,yTrue):
     squareErrors = np.square(yPred-yTrue)
     sse = np.sum(squareErrors)
-    pdb.set_trace()
+#    pdb.set_trace()
     return sse/len(squareErrors)
 
 if __name__ == "__main__":
@@ -42,18 +42,26 @@ if __name__ == "__main__":
     Y = np.asarray(yList).astype(float)
     
     
-    nInstances = 500
-    nParams = 100
-    noiseLevel = 500
-    trueWeights = np.asarray(range(nParams))
-#    trueWeights[5:] = 0
-#    trueWeights[:4] = 0
-    X = np.random.rand(nInstances,nParams)
-    Y = np.dot(X,trueWeights) + noiseLevel*np.random.rand(np.size(nInstances))
+    #uncomment this next block to use synthetic data 
+#    nInstances = 500
+#    nParams = 100
+#    noiseLevel = 500
+#    trueWeights = np.asarray(range(nParams))
+##    trueWeights[5:] = 0
+##    trueWeights[:4] = 0
+#    X = np.random.rand(nInstances,nParams)
+#    Y = np.dot(X,trueWeights) + noiseLevel*np.random.rand(np.size(nInstances))
 
     
     
-    #TODO, feature normalization and adding the 1s column
+    #feature normalization
+    maxXArray = np.max(np.abs(X),axis=0)
+    invMaxXArray = 1/maxXArray
+    X = X*invMaxXArray
+    
+    #TODO, add 1s column
+    
+    
     
     
     #shuffle both X and Y in unison
@@ -73,13 +81,10 @@ if __name__ == "__main__":
     YSplitList = []
     splitStart = 0
     splitEnd = splitSize
-<<<<<<< HEAD
+
     alphaArray = [10,1.0, 0.1,0.001, 0.0001, 0.0]
     
-=======
-    alphaArray = [1.0, 0.1,0.001, 0.0001, 0.0]
 
->>>>>>> origin/master
     #divides the dataset into k-lists
     for i in range(kFolds):
         if i != kFolds -1:
@@ -143,23 +148,13 @@ if __name__ == "__main__":
     aveLassoError = np.average(lassoErrorArray,axis = 0)
     aveClosedError = np.average(closedErrorArray,axis = 0)
     aveGradientError = np.average(gradientErrorArray,axis = 0)
-<<<<<<< HEAD
+
             
     print aveLassoError
     print aveClosedError
     print aveGradientError    
                 
-                    
-            
-        
-        
-        
-        
-    
-=======
 
-    print 'hello'
->>>>>>> origin/master
 
 
 
