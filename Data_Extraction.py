@@ -75,6 +75,7 @@ def get_html(url):
 
 
 def get_num_images(url):
+    #get div for main article first
     request = urllib2.Request(url)
     response = urllib2.urlopen(request)
     soup = BeautifulSoup(response)
@@ -164,10 +165,10 @@ def get_word_list(stop_words):
         vectorizer = CountVectorizer(analyzer = "word", stop_words=None, max_features = 5000)
     words = vectorizer.fit_transform([i for i in corpus.itervalues()])
     dist = np.sum(words.toarray(),axis=0)
-    mean = np.mean(words.toarray())
+    median = np.median(dist)
     vocab = vectorizer.get_feature_names()
     for (feature, value) in zip(vocab,dist):
-        if float(value) <= (mean+2): unique_words.append(feature)
+        if float(value) <= (median): unique_words.append(feature)
     return unique_words
 
 from textblob import TextBlob
@@ -186,8 +187,8 @@ def textual_analysis(data):
         blob_content = TextBlob(dict['content'])
         blob_title = TextBlob(dict['title'])
         scores = dict['scores']
-        scores['n_unique_tokens'] = float(freq_1)/scores['n_tokens_content']
-        scores['n_non_stop_unique_tokens'] = float(freq_2)/scores['n_tokens_content']
+        scores['n_unique_tokens'] = float(freq_1)/float(scores['n_tokens_content'])
+        scores['n_non_stop_unique_tokens'] = float(freq_2)/float(scores['n_tokens_content'])
         scores['global_sentiment_polarity'] = blob_content.sentiment.polarity
         scores['global_subjectivity'] = blob_content.sentiment.subjectivity
         scores['title_sentiment_polarity'] = blob_title.sentiment.polarity
