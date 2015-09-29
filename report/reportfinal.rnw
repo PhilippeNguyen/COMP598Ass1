@@ -6,6 +6,8 @@
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
 
+\usepackage[english]{babel}
+
 
 
 \usepackage{url}
@@ -14,24 +16,24 @@
 
 
 % *** GRAPHICS RELATED PACKAGES ***
-%
+% 
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+% \usepackage[pdftex]{graphicx}
+% declare the path(s) where your graphic files are
+% \graphicspath{{../pdf/}{../jpeg/}}
+% and their extensions so you won't have to specify these with
+% every instance of \includegraphics
+% \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
 \else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  % \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
+% or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+% will default to the driver specified in the system graphics.cfg if no
+% driver is specified.
+% \usepackage[dvips]{graphicx}
+% declare the path(s) where your graphic files are
+% \graphicspath{{../eps/}}
+% and their extensions so you won't have to specify these with
+% every instance of \includegraphics
+% \DeclareGraphicsExtensions{.eps}
 \fi
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
@@ -41,7 +43,7 @@
 % Another good source of documentation is "Using Imported Graphics in
 % LaTeX2e" by Keith Reckdahl which can be found at:
 % http://www.ctan.org/tex-archive/info/epslatex/
-%
+% 
 % latex, and pdflatex in dvi mode, support graphics in encapsulated
 % postscript (.eps) format. pdflatex in pdf mode supports graphics
 % in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
@@ -49,7 +51,7 @@
 % not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
 % which can result in "jaggedy"/blurry rendering of lines and letters as
 % well as large increases in file sizes.
-%
+% 
 % You can find documentation about the pdfTeX application at:
 % http://www.tug.org/applications/pdftex
 
@@ -62,7 +64,7 @@
 
 
 \begin{document}
-%
+% 
 % paper title
 % Titles are generally capitalized except for words such as a, an, and, as,
 % at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
@@ -76,16 +78,16 @@
 % use a multiple column layout for up to three different
 % affiliations
 \author{\IEEEauthorblockN{Alexandre Piche}
-\IEEEauthorblockA{ 260478404 \\
-}
-\and
-\IEEEauthorblockN{Philippe Nguyen}
-\IEEEauthorblockA{260482336 \\
-}
-\and
-\IEEEauthorblockN{Yash Lakhani}
-\IEEEauthorblockA{260500612\\
-}}
+  \IEEEauthorblockA{ 260478404 \\
+  }
+  \and
+  \IEEEauthorblockN{Philippe Nguyen}
+  \IEEEauthorblockA{260482336 \\
+  }
+  \and
+  \IEEEauthorblockN{Yash Lakhani}
+  \IEEEauthorblockA{260500612\\
+  }}
 
 
 
@@ -93,11 +95,13 @@
 \maketitle
 
 <<echo=FALSE>>=
-lasso <- read.csv('aveLasso.csv')
-gradient <- read.csv('aveGradient.csv')
-alpha <- read.csv('alphaArray.csv')
+library(ggplot2)
+setwd('/Users/AlexPiche/Copy/code/python/Comp598/hw1/report')
+lasso <- read.csv('/Users/AlexPiche/Copy/code/python/Comp598/hw1/report/aveLassoError.csv')
+gradient <- read.csv('/Users/AlexPiche/Copy/code/python/Comp598/hw1/report/aveGradientError.csv')
+alpha <- read.csv('/Users/AlexPiche/Copy/code/python/Comp598/hw1/report/alphaArray.csv')
 data <- cbind(alpha, lasso, gradient)
-names(data) <- c('alpha', 'lasso', 'gradient')
+names(data) <- c('lambda', 'lasso', 'ridge')
 @
 
 % As a general rule, do not put math, special symbols or citations
@@ -114,7 +118,6 @@ names(data) <- c('alpha', 'lasso', 'gradient')
 
 
 \IEEEpeerreviewmaketitle
-
 
 
 \section{Introduction}
@@ -159,16 +162,16 @@ $SSR(\beta) = \sum_{i=1}^n (y_i - \textbf{x}_i \beta)^2$. We need to take the de
 cite Joelle's slides lecture 2
 
 \begin{algorithmic}
-\While {$\epsilon > 0.1$ and $i < \text{max\_iterations}$}
-    \State hypothesis $\leftarrow$ $X^T \beta$
-    \State loss $\leftarrow$ hypothesis - $Y$
-    \State gradient $\leftarrow$ 2 $X^T$ loss
-    \State $\beta_{\text{new}} \leftarrow \beta - \frac{\alpha *
-      \text{gradient}}{n}$  
-    \State $\epsilon \leftarrow \| \beta_{\text{new}} - \beta \| $ 
-    \State $i \leftarrow i + 1$
-    \State $\beta_{\text{new}} \leftarrow \beta$
-\EndWhile
+  \While {$\epsilon > 0.1$ and $i < \text{max\_iterations}$}
+  \State hypothesis $\leftarrow$ $X^T \beta$
+  \State loss $\leftarrow$ hypothesis - $Y$
+  \State gradient $\leftarrow$ 2 $X^T$ loss
+  \State $\beta_{\text{new}} \leftarrow \beta - \frac{\alpha *
+    \text{gradient}}{n}$  
+  \State $\epsilon \leftarrow \| \beta_{\text{new}} - \beta \| $ 
+  \State $i \leftarrow i + 1$
+  \State $\beta_{\text{new}} \leftarrow \beta$
+  \EndWhile
 \end{algorithmic}
 
 \subsection{Supplementary information about the Weights}
@@ -234,10 +237,12 @@ Where $W$ is $K \times L$ orthonormal and $Z$ is $N \times L$ matrix
 
 \subsection{Ridge or L2-Regularization}
 
+
+
 \begin{eqnarray}
   \hat{\beta}^{\text{ridge}} = \stackrel{\text{argmin}}{\beta}
-\Bigg\{ \sum_{i=1}^N \bigg(y_i - \beta_0 \sum_{j=1}^p x_{ij} \beta_j \bigg)^2 +
-\lambda \sum_{j=1}^p \beta_j^2 \Bigg\}
+  \Bigg\{ \sum_{i=1}^N \bigg(y_i - \beta_0 \sum_{j=1}^p x_{ij} \beta_j \bigg)^2 +
+  \lambda \sum_{j=1}^p \beta_j^2 \Bigg\}
 \end{eqnarray}
 \cite{hastie2005elements}
 
@@ -251,10 +256,19 @@ The gradient will then be
 We can then add the following condition to our gradient descent algorithm
 
 \begin{algorithmic}
-\If {'Ridge' is True}
-\State loss $+= 2 * \lambda \| \beta \|$
-\EndIf
+  \If {'Ridge' is True}
+  \State loss $+= 2 * \lambda \| \beta \|$
+  \EndIf
 \end{algorithmic}
+
+
+Ridge regression can also be incorporated fairly easily to OLS 
+
+\begin{eqnarray}
+ w = (X^TX + \lambda I)^{-1}X^TY
+\end{eqnarray}
+
+Here, $\lambda$ is a hyper-parameter that we can change and optimize using cross validation. A larger $\lambda$ gives a greater amount of regularization. Having $\lambda = 0$ means no L2 regularization, giving the standard ordinary least squares solution.
 
 \subsection{Lasso or L1-Regularization}
 
@@ -264,8 +278,8 @@ increase the bias of our model, however it will reduce it's variance.
 
 \begin{eqnarray}
   \hat{\beta}^{\text{lasso}} = \stackrel{\text{argmin}}{\beta}
-\Bigg\{ \sum_{i=1}^N \bigg(y_i - \beta_0 \sum_{j=1}^p x_{ij} \beta_j \bigg)^2 +
-\lambda \sum_{j=1}^p | \beta_j | \Bigg\}
+  \Bigg\{ \sum_{i=1}^N \bigg(y_i - \beta_0 \sum_{j=1}^p x_{ij} \beta_j \bigg)^2 +
+  \lambda \sum_{j=1}^p | \beta_j | \Bigg\}
 \end{eqnarray}
 
 There's no closed form solution for the lasso, since the solution is non-linear
@@ -280,9 +294,31 @@ their span, since it is a linear transformation.
 
 \section{Cross-Validation}
 
-k-fold validation
 
 complete randomization of the fold, by a random variable
+
+Our cross validation is done by choosing a $k$, which is the number of cross
+validation folds. We split the entire data set into $k$ different splits, such
+that each split has the same number of instances. If the data set is not divided
+equally by $k$, the remainder is added to the last split. We shall use $X[i]$ and
+$Y[i]$ to denote split $i$ of the data set. 
+\begin{algorithmic}
+\For{ fold $i$ }
+    \State Set $X[i]$ to be the validation feature matrix
+    \State Set $Y[i]$ to be the validation response vector
+    \State Combine all other $X[-i]$ to be the training feature matrix
+    \State Combine all other $X[-i]$ to be the training response vector
+    
+    \For {every hyper-parameter setting}
+        \State Train the linear model with the current training set and given hyper-parameters
+        \State Generate a prediction for $Y$ given the validation feature matrix $X[i]$
+        \State Record the error between the predicted $\hat{Y}$ and $Y[i]$
+    \EndFor
+    
+\EndFor
+\State Average the error for each hyper-parameter setting across every fold
+\State Choose the hyper-parameter setting with the lowest average error
+\end{algorithmic}
 
 \subsection{Hyperparameters Optimization}
 
@@ -297,6 +333,32 @@ we want to optimize the learning rate and the penalty rate
 Also talk about the $\alpha$ parameter for the gradient descent.
 
 Talk about the mean squared error (MSE) obtain when we varied the alpha of the lasso 
+<<echo=FALSE>>=
+ggplot(data, aes(lambda,lasso)) + geom_line() + scale_x_log10()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+    panel.background = element_blank(), axis.line = element_line(colour = "black"))+  labs(title = "Lasso Regularization", y = "Mean Squared Error", x = "Lambda") +
+     theme(plot.title = element_text(lineheight=.8, face="bold"))
+@ 
+
+<<echo=FALSE>>=
+ggplot(data, aes(lambda,ridge)) + geom_line() + scale_x_log10() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+    panel.background = element_blank(), axis.line = element_line(colour = "black")) +  labs(title = "Ridge Regularization", y = "Mean Squared Error", x = "Lambda") + 
+     theme(plot.title = element_text(lineheight=.8, face="bold"))
+@ 
+
+
+\begin{center}
+    \begin{tabular}{| l | l |}
+    \hline
+    \textbf{Algorithm} & \textbf{Mean Squared Error}  \\ \hline
+    OLS & 132736810 \\ \hline
+    Lasso & 132712496  \\ \hline
+    Ridge & 133162007  \\ \hline
+    Principal component analysis & 10C  \\ \hline
+    \end{tabular}
+\end{center}
+
+Given the small difference it might be worth to take the difference in results
+with a pinch of salt, since it might not be significant.
 
 \section{Complementary Datasets}
 
@@ -326,9 +388,9 @@ The authors would like to thank...
 % number - used to balance the columns on the last page
 % adjust value as needed - may need to be readjusted if
 % the document is modified later
-%\IEEEtriggeratref{8}
+% \IEEEtriggeratref{8}
 % The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
+% \IEEEtriggercmd{\enlargethispage{-5in}}
 
 % references section
 
@@ -338,29 +400,29 @@ The authors would like to thank...
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
 % argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
-%
+% \bibliography{IEEEabrv,../bib/paper}
+% 
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
+%   (used to reserve space for the reference number labels box)
 
 
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%   can use a bibliography generated by BibTeX as a .bbl file
+%   BibTeX documentation can be easily obtained at:
+%   http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+%   The IEEEtran BibTeX style support page is at:
+%   http://www.michaelshell.org/tex/ieeetran/bibtex/
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{Bibliography}
-%
+% 
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
+%   (used to reserve space for the reference number labels box)
 
 
 
-% that's all folks
+%   that's all folks
 \end{document}
 
 
