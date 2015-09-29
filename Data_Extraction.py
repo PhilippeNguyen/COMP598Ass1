@@ -1,7 +1,7 @@
 from __future__ import division
 __author__ = 'yaSh'
 
-keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity", "title_subjectivity","title_sentiment_polarity","likes"]
+keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity", "title_subjectivity","title_sentiment_polarity","data_channel_is_politics", 'data_channel_is_business','data_channel_is_living','data_channel_is_style', 'data_channel_is_entertainment','data_channel_is_other',"likes"]
 import urllib2
 import re
 import numpy as np
@@ -103,7 +103,32 @@ def get_num_likes(url):
      print shares
      return shares
 
+topic_list = ['politics', 'business','living','style', 'entertainment', 'other']
+def get_topic(url):
+    selected_topic="other"
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+    soup = BeautifulSoup(response)
+    topic_tag = soup.findAll('li', attrs={'class':"this-vertical"})
+    for topic in topic_list:
+        if topic in str(topic_tag).lower():
+            selected_topic = topic
+            break
+    return selected_topic
 
+
+def get_topic_scores(url):
+        topic_hash = {topic:0 for topic in topic_list}
+        article_topic = get_topic(url)
+        for topic in topic_hash.iterkeys():
+            if article_topic==topic:
+                topic_hash[topic] = 1
+                break
+        for k in topic_hash.iterkeys():
+            if 'data' in str(k) : continue
+            new = "data_channel_is_"+str(k)
+            topic_hash[new] = topic_hash.pop(k)
+        return topic_hash
 
 corpus = {}
 def compute_features(url,date):
@@ -130,8 +155,9 @@ def compute_features(url,date):
         score_hash['num_self_hrefs'] = num_self_hrefs
         score_hash['likes'] = get_num_likes(url)
         date_hash = get_day(date)
-        feature_vector['scores'] = dict(score_hash,**date_hash)
-        # print feature_vector['scores']
+        conc_dict = dict(score_hash,**date_hash)
+        topic_hash = get_topic_scores(url)
+        feature_vector['scores'] = dict(conc_dict,**topic_hash)
         return feature_vector
     return {}
 
@@ -160,9 +186,9 @@ def get_word_list(stop_words):
     if stop_words :
         from nltk.corpus import stopwords
         stop = stopwords.words('english')
-        vectorizer = CountVectorizer(analyzer = "word", stop_words=stop, max_features = 5000)
+        vectorizer = CountVectorizer(analyzer = "word", stop_words=stop)
     else:
-        vectorizer = CountVectorizer(analyzer = "word", stop_words=None, max_features = 5000)
+        vectorizer = CountVectorizer(analyzer = "word", stop_words=None)
     words = vectorizer.fit_transform([i for i in corpus.itervalues()])
     dist = np.sum(words.toarray(),axis=0)
     median = np.median(dist)
@@ -195,10 +221,16 @@ def textual_analysis(data):
         scores['title_subjectivity'] = blob_title.sentiment.subjectivity
     return data
 
+
+
+
 def run_crawler():
     url = 'http://www.huffingtonpost.ca/'
     feeds_by_date = get_articles(url, depth=2,feeds=[])
     print str(len(feeds_by_date))  +  " Articles Found"
+    print
+    print str(len(keyorder)) + " Features Available"
+    print
     from operator import itemgetter
     sorted_feeds = sorted(feeds_by_date, key=itemgetter('date'))
     sorted_feeds = sorted(sorted_feeds, key=itemgetter('url'))
@@ -216,8 +248,11 @@ def run_crawler():
     scores_data.to_csv("data.csv")
 
 
+
 def main():
     run_crawler()
+
+
 
 if __name__ == '__main__':
     main()
