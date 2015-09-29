@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Sep 19 14:00:08 2015
-
-@author: Philippe
-"""
-
 import numpy as np
 import csv
 from OLSClosed import OLSClosed
@@ -29,4 +22,4 @@ X_new = X_new
 
 ones = np.ones(X_new.shape[0])
 X_new = np.column_stack((ones, X_new))
-test = gradientDescent(Y[0:1000,], X_new[0:1000,], 0, 100000, 1e-12)
+test = gradientDescent(Y[0:1000,], X_new[0:1000,], 0, 2000000, 1e-13)

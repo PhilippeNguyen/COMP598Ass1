@@ -44,7 +44,7 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, ridge = False
 
     epsilon = 9999
     i = 1
-    W = np.random.normal(0, 1, X.shape[1])
+    W = np.zeros(X.shape[1]) #np.random.normal(0, 1, X.shape[1])
 
     while (epsilon > tolerance and i < nb_iterations):
         fitted_values = np.dot(X, W)
@@ -54,6 +54,7 @@ def gradientDescent(Y, X, tolerance, nb_iterations, learning_rate, ridge = False
             penalty = 2 * penalty_rate * np.linalg.norm(W, ord = 1)
 
         gradient = 2 * np.dot(X.T, loss)/X.shape[0] + penalty
+        print np.linalg.norm(loss, ord = 1) / X.shape[0], np.max(gradient)
         W_new = W - learning_rate * gradient 
         epsilon = np.linalg.norm(W_new - W, ord = 1) / X.shape[1]
         i += 1
