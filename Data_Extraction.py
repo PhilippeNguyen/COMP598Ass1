@@ -1,54 +1,39 @@
 from __future__ import division
 __author__ = 'yaSh'
 
+keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity"]
 import urllib2
 import re
+import numpy as np
+import pandas as pd
 from BeautifulSoup import BeautifulSoup
-
-
-# import scrapy
-#
-# from scrapy.item import Item, Field
-#
-# class Article(Item):
-#     title = Field()
-#     author = Field()
-#     tag = Field()
-#     date = Field()
-#     link = Field()
-#
-# from scrapy.contrib.spiders import CrawlSpider, Rule
-# from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
-# from scrapy.selector import HtmlXPathSelector
-#
-# def article_scraper(CrawlSpider, *args, **kwargs):
-#     start_url = [kwargs.get('start_url') if kwargs.get('start_url ')]
-#     if not start_url : start_url = ['http://www.huffingtonpost.ca/']
-#     rules = [Rule(SgmlLinkExtractor(allow=[r'\d{4}/\d{2}/\w+']), callback='parser')]
-#     def parser(self, response):
-#          hxs = HtmlXPathSelector(response)
-#          item = Article()
-#          item['title'] = hxs.select('//header/h1/text()').extract()
-#          item['tag'] = hxs.select("//header/div[@class='post-data']/p/a/text()").extract()
-#          return item
-
-
-
 
 visited = set()
 queue = []
 name = "huffingtonpost"
-def get_articles(url):
-    print url
-    request = urllib2.Request(url)
-    response = urllib2.urlopen(request)
-    soup = BeautifulSoup(response)
+def get_articles(start_url, depth, feeds):
+    queue = [start_url]
+    while queue:
+        if len(feeds) > 0: break
+        for url in queue:
+            queue.remove(url)
+            request = urllib2.Request(url)
+            response = urllib2.urlopen(request)
+            soup = BeautifulSoup(response)
+            articles = soup.findAll('a', href=re.compile(r'\d{4}/\d{2}/\d{2}/\w+'))
+            for k,v in process_links(articles).iteritems():
+                feeds.append({'url':k, 'date':v})
+        for item in feeds: queue.append(item['url'])
+    return feeds
+
+
+
+def process_links(articles):
     url_list = {}
-    articles = soup.findAll('a', href=re.compile(r'\d{4}/\d{2}/\d{2}/\w+'))
     for article in articles:
         try:
             url = article['href']
-            if (name in url) & (str(url).endswith('.html')) & (url not in visited):
+            if (name in url) & (str(url).endswith('.html')) & (url not in visited) & ('linkedin' not in url):
                 visited.add(url)
                 publish_date =re.search(r'(\d+/\d+/\d+)', url).group(1)
                 url_list[article['href']] = publish_date
@@ -63,10 +48,10 @@ def get_num_links(url):
      soup = BeautifulSoup(response)
      hrefs = soup.findAll('a')
      self_hrefs = soup.findAll('a', href=re.compile(r'\d{4}/\d{2}/\d{2}/\w+'))
-     for link in self_hrefs: queue.append(link['href'])
-     num_self_hrefs = len(self_hrefs)
+     links= process_links(self_hrefs)
+     num_self_hrefs = len(links)
      num_hrefs = len(hrefs)
-     return num_hrefs, num_self_hrefs
+     return  num_hrefs, num_self_hrefs
 
 def get_title(url):
     soup = BeautifulSoup(urllib2.urlopen(url))
@@ -74,21 +59,26 @@ def get_title(url):
 
 def get_text(url):
     from boilerpipe.extract import Extractor
-    try:
+    try :
         extractor = Extractor(extractor='ArticleExtractor', url=url)
         return extractor.getText()
     except:
-         return []
+        return ""
 
-def get_num_images(url):
+def get_html(url):
     from boilerpipe.extract import Extractor
-    try:
-        extractor = Extractor(extractor='ArticleExtractor', url=url)
-        images = extractor.getImages()
-        if images: return len(images)
-        else : return 0
+    try :
+        extractor = Extractor(extractor='DefaultExtractor', url=url)
+        return extractor.getHTML()
     except:
-        return 0
+        return ""
+
+
+import image_scraper
+def get_num_images(url):
+    images = image_scraper.scrape_images(url)
+    return len(images)
+
 
 def get_num_non_stop_words(content):
     from nltk.corpus import stopwords
@@ -112,46 +102,128 @@ def get_num_shares(url):
 #     return count;
 # }
 
+corpus = {}
 def compute_features(url,date):
     #omitting articles with no text
     content = (get_text(url).encode('ascii', 'ignore'))
     title = (get_title(url).encode('ascii', 'ignore'))
     if (len(content)) & (len(title)):
-        print
+        corpus[title] = content
         print "Computing Feature Vector for: " + title + " | Published: " + date
         feature_vector = {'url':url, 'title':title, 'content':content, 'publish_date':date}
         score_hash = {}
-        n_tokens_title = len(feature_vector['title'])
-        n_tokens_content = len(feature_vector['content'])
-        average_token_length = sum(len(word) for word in feature_vector['content'].split())/float(n_tokens_content)
+        n_tokens_title = len(title.split())
+        n_tokens_content = len(content.split())
+        average_token_length = sum(len(list(word)) for word in content.split())/n_tokens_content
         num_images = get_num_images(url)
-        print get_num_shares(url)
         score_hash['n_tokens_title'] = n_tokens_title
         score_hash['n_tokens_content'] = n_tokens_content
+        score_hash['n_non_stop_words'] = get_num_non_stop_words(content)
         score_hash['average_token_length'] = average_token_length
-        score_hash['num_images'] = num_images
-        score_hash['num_non_stop_words'] = get_num_non_stop_words(content)
+        score_hash['num_imgs'] = num_images
+        score_hash['num_videos'] = 0
         num_hrefs, num_self_hrefs = get_num_links(url)
         score_hash['num_hrefs'] = num_hrefs
         score_hash['num_self_hrefs'] = num_self_hrefs
-        feature_vector['scores'] = score_hash
-        print
-        print feature_vector['scores']
+        date_hash = get_day(date)
+        feature_vector['scores'] = dict(score_hash,**date_hash)
+        # print feature_vector['scores']
         return feature_vector
+    return {}
+
+from datetime import datetime
+def get_day(date):
+    weekend = ['friday', 'saturday', 'sunday']
+    date_time = datetime.strptime(date, "%Y/%m/%d")
+    day = date_time.strftime("%A")
+    is_weekend = 0
+    if (day.lower() in weekend): is_weekend = 1
+    day_hash = {'monday':0, 'tuesday':0, "wednesday":0,'thursday':0,'friday':0,'saturday':0, 'sunday':0}
+    for (category,value) in day_hash.iteritems():
+        if day.lower() == category:
+            day_hash[category] = 1
+            break
+    for k in day_hash.iterkeys():
+        if 'weekday' in str(k) : continue
+        new = "weekday_is_"+str(k)
+        day_hash[new] = day_hash.pop(k)
+    day_hash['is_weekend'] = is_weekend
+    return day_hash
+
+def get_word_list(stop_words):
+    unique_words = []
+    from sklearn.feature_extraction.text import CountVectorizer
+    if stop_words :
+        from nltk.corpus import stopwords
+        stop = stopwords.words('english')
+        vectorizer = CountVectorizer(analyzer = "word", stop_words=stop, max_features = 5000)
+    else:
+        vectorizer = CountVectorizer(analyzer = "word", stop_words=None, max_features = 5000)
+    words = vectorizer.fit_transform([i for i in corpus.itervalues()])
+    dist = np.sum(words.toarray(),axis=0)
+    mean = np.mean(words.toarray())
+    print mean
+    vocab = vectorizer.get_feature_names()
+    print dist
+    for (feature, value) in zip(vocab,dist):
+        if float(value) <= (mean+1): unique_words.append(feature)
+    return unique_words
+
+from textblob import TextBlob
+def textual_analysis(data):
+    #need to stem words
+    unique_words= get_word_list(stop_words=False)
+    non_stop_unique = get_word_list(stop_words=True)
+    for dict in data:
+        freq_1 = 0
+        freq_2 = 0
+        for word in dict['content'].split():
+            if word in unique_words:
+                freq_1+=1
+            if word in non_stop_unique:
+                freq_2+=1
+        blob = TextBlob(dict['content'])
+        scores = dict['scores']
+        scores['n_unique_tokens'] = float(freq_1)/scores['n_tokens_content']
+        scores['n_non_stop_unique_tokens'] = float(freq_2)/scores['n_tokens_content']
+        scores['global_sentiment_polarity'] = blob.sentiment.polarity
+        scores['global_subjectivity'] = blob.sentiment.subjectivity
+    return data
+
+def run_crawler():
+    url = 'http://www.huffingtonpost.ca/'
+    feeds_by_date = get_articles(url, depth=2,feeds=[])
+    print str(len(feeds_by_date))  +  " Articles Found"
+    from operator import itemgetter
+    sorted_feeds = sorted(feeds_by_date, key=itemgetter('date'))
+    sorted_feeds = sorted(sorted_feeds, key=itemgetter('url'))
+    data = []
+    for feed in sorted_feeds:
+            feature_vector = compute_features(feed['url'], feed['date'])
+            if feature_vector: data.append(feature_vector)
+    data = textual_analysis(data)
+    scores_data = []
+    for dict in data:
+        scores = dict['scores']
+        scores['url'] =dict['url']
+        scores_data.append(scores)
+    scores_data = pd.DataFrame(scores_data)[keyorder]
+    scores_data.to_csv("data.csv")
+
+
+
+
+import vidscraper
+def get_num_vids(url):
+    video = vidscraper.auto_scrape(url)
+    return video
+
+def get_multimedia_type(url):
+    return
+
 
 def main():
-    url = 'http://www.huffingtonpost.ca/'
-    feeds_by_date = get_articles(url)
-    depth = 0
-    print str(len(feeds_by_date)) + " Articles Found at Depth Level : " + str(depth)
-    data = [compute_features(url,date) for (url,date) in feeds_by_date.iteritems()]
-    # while depth < 2:
-    #     depth += 1
-    #     print str(len(queue)) + " Articles Found at Depth Level : " + str(depth)
-    #     for url in queue:
-    #         feeds_by_date = get_articles(url)
-    #         data = [compute_features(url,date) for (url,date) in feeds_by_date.iteritems()]
-    #     del queue[:]
+    run_crawler()
 
 
 if __name__ == '__main__':
