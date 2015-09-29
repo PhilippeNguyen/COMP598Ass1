@@ -1,7 +1,7 @@
 from __future__ import division
 __author__ = 'yaSh'
 
-keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity","likes"]
+keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity", "title_subjectivity","title_sentiment_polarity","likes"]
 import urllib2
 import re
 import numpy as np
@@ -10,6 +10,7 @@ from BeautifulSoup import BeautifulSoup
 
 visited = set()
 queue = []
+#queue = Queue()
 name = "huffingtonpost"
 def get_articles(start_url, depth, feeds):
     queue = [start_url]
@@ -73,9 +74,14 @@ def get_html(url):
         return ""
 
 
-import image_scraper
 def get_num_images(url):
-    images = image_scraper.scrape_images(url)
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+    soup = BeautifulSoup(response)
+    images = []
+    for i in soup.findAll('img'):
+        if ('<img src=' in str(i)):
+             images.append(i)
     return len(images)
 
 
@@ -177,12 +183,15 @@ def textual_analysis(data):
                 freq_1+=1
             if word in non_stop_unique:
                 freq_2+=1
-        blob = TextBlob(dict['content'])
+        blob_content = TextBlob(dict['content'])
+        blob_title = TextBlob(dict['title'])
         scores = dict['scores']
         scores['n_unique_tokens'] = float(freq_1)/scores['n_tokens_content']
         scores['n_non_stop_unique_tokens'] = float(freq_2)/scores['n_tokens_content']
-        scores['global_sentiment_polarity'] = blob.sentiment.polarity
-        scores['global_subjectivity'] = blob.sentiment.subjectivity
+        scores['global_sentiment_polarity'] = blob_content.sentiment.polarity
+        scores['global_subjectivity'] = blob_content.sentiment.subjectivity
+        scores['title_sentiment_polarity'] = blob_title.sentiment.polarity
+        scores['title_subjectivity'] = blob_title.sentiment.subjectivity
     return data
 
 def run_crawler():
