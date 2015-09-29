@@ -1,7 +1,7 @@
 from __future__ import division
 __author__ = 'yaSh'
 
-keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity"]
+keyorder = ["url","n_tokens_title","n_tokens_content","n_unique_tokens","n_non_stop_words","n_non_stop_unique_tokens",	"num_hrefs", "num_self_hrefs", "num_imgs",	 "num_videos",	"average_token_length",	 "weekday_is_monday","weekday_is_tuesday","weekday_is_wednesday","weekday_is_thursday","weekday_is_friday", "weekday_is_saturday","weekday_is_sunday",	"is_weekend","global_subjectivity",	"global_sentiment_polarity","likes"]
 import urllib2
 import re
 import numpy as np
@@ -48,8 +48,7 @@ def get_num_links(url):
      soup = BeautifulSoup(response)
      hrefs = soup.findAll('a')
      self_hrefs = soup.findAll('a', href=re.compile(r'\d{4}/\d{2}/\d{2}/\w+'))
-     links= process_links(self_hrefs)
-     num_self_hrefs = len(links)
+     num_self_hrefs = len(self_hrefs)
      num_hrefs = len(hrefs)
      return  num_hrefs, num_self_hrefs
 
@@ -85,22 +84,19 @@ def get_num_non_stop_words(content):
     stop = stopwords.words('english')
     return 1 - len([i for i in content.split() if i not in stop])/len(content)
 
-def get_num_shares(url):
-     url = "https://www.sharedcount.com/#url="+url
-     request = urllib2.Request(url)
-     response = urllib2.urlopen(request)
-     soup = BeautifulSoup(response)
-     print
+def get_num_likes(url):
+     import json
+     try:
+         share_link = "http://graph.facebook.com/?id="+url
+         response = urllib2.urlopen(share_link)
+         data = json.loads(response.read())
+         shares =  dict(data)['shares']
+     except:
+         shares = 0
+     print shares
+     return shares
 
-# int GetLikes(string url) {
-#
-#     string jsonString = new System.Net.WebClient().DownloadString("http://graph.facebook.com/?ids=" + url);
-#
-#     var json = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize(jsonString);
-#     int count = json[url]["shares"];
-#
-#     return count;
-# }
+
 
 corpus = {}
 def compute_features(url,date):
@@ -125,6 +121,7 @@ def compute_features(url,date):
         num_hrefs, num_self_hrefs = get_num_links(url)
         score_hash['num_hrefs'] = num_hrefs
         score_hash['num_self_hrefs'] = num_self_hrefs
+        score_hash['likes'] = get_num_likes(url)
         date_hash = get_day(date)
         feature_vector['scores'] = dict(score_hash,**date_hash)
         # print feature_vector['scores']
@@ -162,11 +159,9 @@ def get_word_list(stop_words):
     words = vectorizer.fit_transform([i for i in corpus.itervalues()])
     dist = np.sum(words.toarray(),axis=0)
     mean = np.mean(words.toarray())
-    print mean
     vocab = vectorizer.get_feature_names()
-    print dist
     for (feature, value) in zip(vocab,dist):
-        if float(value) <= (mean+1): unique_words.append(feature)
+        if float(value) <= (mean+2): unique_words.append(feature)
     return unique_words
 
 from textblob import TextBlob
@@ -211,20 +206,8 @@ def run_crawler():
     scores_data.to_csv("data.csv")
 
 
-
-
-import vidscraper
-def get_num_vids(url):
-    video = vidscraper.auto_scrape(url)
-    return video
-
-def get_multimedia_type(url):
-    return
-
-
 def main():
     run_crawler()
-
 
 if __name__ == '__main__':
     main()
