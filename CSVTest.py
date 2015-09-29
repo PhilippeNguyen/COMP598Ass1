@@ -12,6 +12,7 @@ from sklearn.utils import shuffle
 from sklearn import linear_model
 from OLSgradientDescent import gradientDescent
 import pdb
+from sklearn.decomposition import PCA
 
 def mse(yPred,yTrue):
     squareErrors = np.square(yPred-yTrue)
@@ -59,9 +60,22 @@ if __name__ == "__main__":
     invMaxXArray = 1/maxXArray
     X = X*invMaxXArray
     
-    #TODO, add 1s column
+    #PCA
+    X_old = X
+    pca = PCA()
+    pca.fit(X)
+    X = pca.transform(X)
+        #choose number of components which will explain more than 95% of the variance
+    sumVariance= np.cumsum(pca.explained_variance_ratio_)
+    numComponents = np.argmax(sumVariance>0.95)
+    pca = PCA(n_components=numComponents)
+    pca.fit(X)
+    X = pca.transform(X)
     
+    # add 1s column
+    X = np.c_[np.ones(np.size(X,axis=0)),X]
     
+
     
     
     #shuffle both X and Y in unison
