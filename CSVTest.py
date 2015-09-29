@@ -61,16 +61,16 @@ if __name__ == "__main__":
     X = X*invMaxXArray
     
     #PCA
-    X_old = X
-    pca = PCA()
-    pca.fit(X)
-    X = pca.transform(X)
-        #choose number of components which will explain more than 95% of the variance
-    sumVariance= np.cumsum(pca.explained_variance_ratio_)
-    numComponents = np.argmax(sumVariance>0.95)
-    pca = PCA(n_components=numComponents)
-    pca.fit(X)
-    X = pca.transform(X)
+#    X_old = X
+#    pca = PCA()
+#    pca.fit(X)
+#    X = pca.transform(X)
+#        #choose number of components which will explain more than 95% of the variance
+#    sumVariance= np.cumsum(pca.explained_variance_ratio_)
+#    numComponents = np.argmax(sumVariance>0.95)
+#    pca = PCA(n_components=numComponents)
+#    pca.fit(X)
+#    X = pca.transform(X)
     
     # add 1s column
     X = np.c_[np.ones(np.size(X,axis=0)),X]
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     splitStart = 0
     splitEnd = splitSize
 
-    alphaArray = [10,1.0, 0.1,0.001, 0.0001, 0.0]
+    lambArray = [1000,100,10,1.0, 1e-1,1e-2, 1e-3,1e-4,1e-5,1e-6, 0.0]
     
 
     #divides the dataset into k-lists
@@ -112,9 +112,9 @@ if __name__ == "__main__":
         splitEnd = splitEnd + splitSize
         
     # for each kFold, set it aside as a validation set, and use the rest as training
-    closedErrorArray = np.zeros((kFolds,np.size(alphaArray)))
-    lassoErrorArray = np.zeros((kFolds,np.size(alphaArray)))
-    gradientErrorArray = np.zeros((kFolds,np.size(alphaArray)))
+    closedErrorArray = np.zeros((kFolds,np.size(lambArray)))
+    lassoErrorArray = np.zeros((kFolds,np.size(lambArray)))
+    gradientErrorArray = np.zeros((kFolds,np.size(lambArray)))
     
     for i in range(kFolds):
         print "fold " + str(i)
@@ -135,11 +135,11 @@ if __name__ == "__main__":
 
         #run all hyperparameters
 
-        for j in range(np.size(alphaArray)):
+        for j in range(np.size(lambArray)):
             print "alpha " + str(j)
 
         #estimation using sklearns Lasso regression
-            clf = linear_model.Lasso(alpha=alphaArray[j], max_iter = 10000)
+            clf = linear_model.Lasso(alpha=lambArray[j], max_iter = 10000)
             clf.fit(Xtrain,Ytrain)
 
 
@@ -148,13 +148,13 @@ if __name__ == "__main__":
             lassoErrorArray[i,j] = error
 
         #Estimation and prediction using closed form solution 
-            wEst = OLSClosed(Xtrain,Ytrain,L2 = alphaArray[j])
+            wEst = OLSClosed(Xtrain,Ytrain,L2 = lambArray[j])
             Ypred = np.dot(Xvalid,wEst)
             error = mse(Ypred,Yvalid)            
             closedErrorArray[i,j]= error
 
         #Estimation and prediction using gradient descent
-            wEst = gradientDescent(Ytrain,Xtrain,0.0001, 10000, 0.01, 'ridge', alphaArray[j])
+            wEst = gradientDescent(Ytrain,Xtrain,0.0001, 10000, 0.01, 'ridge', lambArray[j])
             Ypred = np.dot(Xvalid,wEst)
             error = mse(Ypred,Yvalid)
             gradientErrorArray[i,j]= error
