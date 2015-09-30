@@ -21,6 +21,18 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{Lichman:2013}
+\BIBentryALTinterwordspacing
+M.~Lichman, ``{UCI} machine learning repository,'' 2013. [Online]. Available:
+  \url{http://archive.ics.uci.edu/ml}
+\BIBentrySTDinterwordspacing
+
+\bibitem{fernandes2015proactive}
+K.~Fernandes, P.~Vinagre, and P.~Cortez, ``A proactive intelligent decision
+  support system for predicting the popularity of online news,'' in
+  \emph{Progress in Artificial Intelligence}.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, 2015, pp. 535--546.
+
 \bibitem{davidson2004econometric}
 R.~Davidson and J.~G. MacKinnon, \emph{Econometric theory and methods}.\hskip
   1em plus 0.5em minus 0.4em\relax Oxford University Press New York, 2004,
