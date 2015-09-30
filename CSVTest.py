@@ -60,7 +60,7 @@ if __name__ == "__main__":
     invMaxXArray = 1/maxXArray
     X = X*invMaxXArray
     
-    #PCA
+   # PCA
 #    X_old = X
 #    pca = PCA()
 #    pca.fit(X)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
 #        #choose number of components which will explain more than 95% of the variance
 #    sumVariance= np.cumsum(pca.explained_variance_ratio_)
 #    numComponents = np.argmax(sumVariance>0.95)
-#    pca = PCA(n_components=numComponents)
+#    pca = PCA(n_components=3)
 #    pca.fit(X)
 #    X = pca.transform(X)
     
@@ -83,10 +83,10 @@ if __name__ == "__main__":
     
     #create and remove test set, 
     #choose the test set arbitrarily
-    Xtest = []
-    Ytest = []
-    X = X
-    Y = Y
+    Xtest = X[35000:]
+    Ytest = Y[35000:]
+    X = X[:35000]
+    Y = Y[:35000]
 
     test = gradientDescent(Y, X, 0.1, 10000, 0.01, 'nothing')
 #    Perform Cross Validation for K-Folds
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     splitStart = 0
     splitEnd = splitSize
 
-    lambArray = [1000,100,10,1.0, 1e-1,1e-2, 1e-3,1e-4,1e-5,1e-6, 0.0]
+    lambArray = [1e-1, 1e-3,1e-6, 0.0]
     
 
     #divides the dataset into k-lists
@@ -155,21 +155,37 @@ if __name__ == "__main__":
 
         #Estimation and prediction using gradient descent
             wEst = gradientDescent(Ytrain,Xtrain,0.0001, 10000, 0.01, 'ridge', lambArray[j])
-            Ypred = np.dot(Xvalid,wEst)
+            Ypred = np.dot(Xvalid,wEst['Weights'])
             error = mse(Ypred,Yvalid)
             gradientErrorArray[i,j]= error
 
     aveLassoError = np.average(lassoErrorArray,axis = 0)
     aveClosedError = np.average(closedErrorArray,axis = 0)
     aveGradientError = np.average(gradientErrorArray,axis = 0)
+    
+    minLasso = np.argmin(aveLassoError)
+    minClosed = np.argmin(aveClosedError)
+    minGradient = np.argmin(aveGradientError)
+    #run on test set
+    clf = linear_model.Lasso(alpha=lambArray[minLasso], max_iter = 10000)
+    clf.fit(X,Y)
+
+
+    Ypred = clf.predict(Xtest)
+    lassoTestError  = mse(Ypred,Ytest)
+    
+    
+    wEst = OLSClosed(X,Y,L2 = lambArray[minClosed])
+    Ypred = np.dot(Xtest,wEst)
+    closedTestError  = mse(Ypred,Ytest)            
+    
+    
+    wEst = gradientDescent(Y,X,0.0001, 10000, 0.01, 'ridge', lambArray[minGradient])
+    Ypred = np.dot(Xtest,wEst['Weights'])
+    gradientTestError  = mse(Ypred,Ytest)
+    
 
             
-    print aveLassoError
-    print aveClosedError
-    print aveGradientError    
-                
-
-
-
+            
 
 
