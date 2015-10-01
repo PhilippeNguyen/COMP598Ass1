@@ -118,7 +118,7 @@ if __name__ == "__main__":
     splitStart = 0
     splitEnd = splitSize
 
-    lambArray = [0.25, 1e-1, 1e-2, 1e-3,1e-4,1e-5,1e-10,0.0]
+    lambArray = [0.25, 1e-1, 1e-2, 1e-3,1e-4,1e-5,1e-10]
     
 
     #divides the dataset into k-lists
