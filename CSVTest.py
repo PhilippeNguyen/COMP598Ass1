@@ -32,14 +32,16 @@ if __name__ == "__main__":
     
 
     if dataSet == '1K_data.csv':
+        nonPredictiveFeatures = 2
+    elif dataSet == 'fullDataSet.csv':
         nonPredictiveFeatures = 3
     elif dataSet == 'smallDataSet.csv':
-        nonPredictiveFeatures = 2
+        nonPredictiveFeatures = 3
     elif dataSet == 'OnlineNewsPopularity/OnlineNewsPopularity.csv':   
         nonPredictiveFeatures = 2
     else:
         print 'non Predictive Features for this data set unknown, using 2'
-        nonPredictiveFeatures = 2
+        nonPredictiveFeatures = 3
         
     #read the CSV and create X and Y Matrices
     
